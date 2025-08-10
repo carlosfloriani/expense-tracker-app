@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import CounterBar from "@/components/CounterBar";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import ExpenseForm from "@/components/ExpenseForm";
+import ExpenseCalendar from "@/components/ExpenseCalendar";
 
 // Tipos
 type Person = "Carlos" | "Gabreilly";
@@ -29,14 +29,28 @@ const monthKey = () => {
 const EXPENSES_KEY = (m: string) => `expenses-${m}`;
 const DEFAULTS_KEY = (m: string) => `defaults-${m}`;
 
+const todayStr = () => {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+const toIsoFromLocalDate = (ymd: string) => {
+  // Use 12:00 local time to avoid timezone shifts when converting to ISO
+  return new Date(`${ymd}T12:00:00`).toISOString();
+};
+
 const Index = () => {
   const [currentMonth, setCurrentMonth] = useState<string>(monthKey());
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
-  // Estados do formulário
-  const [amount, setAmount] = useState<number>(1);
-  const [person, setPerson] = useState<Person>("Carlos");
-  const [type, setType] = useState<ExpenseType>("Ifood"); // pré-selecionado
+// Estados do formulário
+const [amount, setAmount] = useState<number>(1);
+const [person, setPerson] = useState<Person>("Carlos");
+const [type, setType] = useState<ExpenseType>("Ifood"); // pré-selecionado
+const [dateStr, setDateStr] = useState<string>(todayStr());
 
   // Carregar dados do mês atual
   useEffect(() => {
@@ -104,14 +118,13 @@ const Index = () => {
       return;
     }
 
-    const newExpense: Expense = {
+const newExpense: Expense = {
       id: crypto.randomUUID(),
-      date: new Date().toISOString(),
+      date: toIsoFromLocalDate(dateStr),
       amount,
       person,
       type,
     };
-
     setExpenses((prev) => [newExpense, ...prev]);
 
     toast({
@@ -142,83 +155,24 @@ const Index = () => {
         </section>
       </header>
 
-      <main className="container pb-16 space-y-8">
+      <main className="container pb-16 space-y-8" role="main">
         <section aria-label="Formulário de novo gasto" className="rounded-lg border border-border bg-card p-4 sm:p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Quanto gastou */}
-            <div className="space-y-2">
-              <label className="text-sm text-muted-foreground">Quanto gastou?</label>
-              <ToggleGroup
-                type="single"
-                value={String(amount)}
-                onValueChange={(v) => v && setAmount(parseFloat(v))}
-                className="flex flex-wrap gap-2"
-              >
-                {[0.25, 0.5, 0.75, 1].map((v) => (
-                  <ToggleGroupItem
-                    key={v}
-                    value={String(v)}
-                    aria-label={`Valor ${v}`}
-                    className="rounded-full px-4 py-2 text-sm data-[state=on]:bg-accent data-[state=on]:text-accent-foreground"
-                  >
-                    {v.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
-
-            {/* Quem gastou */}
-            <div className="space-y-2">
-              <label className="text-sm text-muted-foreground">Quem gastou?</label>
-              <ToggleGroup
-                type="single"
-                value={person}
-                onValueChange={(v) => v && setPerson(v as Person)}
-                className="flex flex-wrap gap-2"
-              >
-                {["Carlos", "Gabreilly"].map((p) => (
-                  <ToggleGroupItem
-                    key={p}
-                    value={p}
-                    aria-label={`Pessoa ${p}`}
-                    className="rounded-full px-4 py-2 text-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-                  >
-                    {p}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
-
-            {/* Tipo */}
-            <div className="space-y-2">
-              <label className="text-sm text-muted-foreground">Tipo</label>
-              <ToggleGroup
-                type="single"
-                value={type}
-                onValueChange={(v) => v && setType(v as ExpenseType)}
-                className="flex flex-wrap gap-2"
-              >
-                {["Ifood", "Restaurante"].map((t) => (
-                  <ToggleGroupItem
-                    key={t}
-                    value={t}
-                    aria-label={`Tipo ${t}`}
-                    className="rounded-full px-4 py-2 text-sm data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground"
-                  >
-                    {t}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
-
-            <div>
-              <Button type="submit" className="rounded-full">
-                Enviar
-              </Button>
-            </div>
-          </form>
+          <ExpenseForm
+            amount={amount}
+            setAmount={setAmount}
+            person={person}
+            setPerson={setPerson}
+            type={type}
+            setType={setType}
+            dateStr={dateStr}
+            setDateStr={setDateStr}
+            onSubmit={handleSubmit}
+          />
         </section>
 
+        <section aria-label="Calendário do mês" className="rounded-lg border border-border bg-card p-4 sm:p-6">
+          <ExpenseCalendar expenses={expenses} currentMonth={currentMonth} />
+        </section>
         <section aria-label="Lista de gastos" className="space-y-3">
           <h2 className="text-base font-medium text-foreground">
             Gastos do mês ({currentMonth})

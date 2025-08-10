@@ -42,20 +42,19 @@ All colors MUST be HSL.
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Personas (light) */
+    --person-carlos: 210 80% 55%;
+    --person-carlos-foreground: 240 10% 10%;
+    --person-gabreilly: 330 85% 65%;
+    --person-gabreilly-foreground: 240 10% 10%;
   }
 
   .dark {
@@ -101,6 +100,12 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 210 20% 92%;
     --sidebar-border: 220 15% 20%;
     --sidebar-ring: 265 70% 75%;
+
+    /* Personas (dark) - tons pastel */
+    --person-carlos: 210 80% 70%;
+    --person-carlos-foreground: 235 15% 12%;
+    --person-gabreilly: 330 80% 75%;
+    --person-gabreilly-foreground: 235 15% 12%;
   }
 }
 
