@@ -189,8 +189,23 @@ const newExpense: Expense = {
                     <span className="text-muted-foreground">•</span>
                     <span className="text-foreground">{e.type}</span>
                   </div>
-                  <div className="text-sm font-medium text-foreground">
-                    {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-medium text-foreground">
+                      {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                    </div>
+                    <button
+                      onClick={() => {
+                        setExpenses(prev => prev.filter(expense => expense.id !== e.id));
+                        toast({
+                          title: "Gasto removido",
+                          description: "O gasto foi excluído com sucesso.",
+                        });
+                      }}
+                      className="text-muted-foreground hover:text-destructive transition-colors p-1"
+                      aria-label="Excluir gasto"
+                    >
+                      ✕
+                    </button>
                   </div>
                 </li>
               ))}

@@ -72,6 +72,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				personCarlos: {
+					DEFAULT: 'hsl(var(--person-carlos))',
+					foreground: 'hsl(var(--person-carlos-foreground))'
+				},
+				personGaby: {
+					DEFAULT: 'hsl(var(--person-gabreilly))',
+					foreground: 'hsl(var(--person-gabreilly-foreground))'
 				}
 			},
 			borderRadius: {
