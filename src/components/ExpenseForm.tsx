@@ -40,7 +40,11 @@ export default function ExpenseForm({
               key={p}
               value={p}
               aria-label={`Pessoa ${p}`}
-              className="rounded-full px-4 py-2 text-sm data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+              className={`rounded-full px-4 py-2 text-sm ${
+                p === "Carlos" 
+                  ? "data-[state=on]:bg-personCarlos data-[state=on]:text-personCarlos-foreground" 
+                  : "data-[state=on]:bg-personGaby data-[state=on]:text-personGaby-foreground"
+              }`}
             >
               {p}
             </ToggleGroupItem>

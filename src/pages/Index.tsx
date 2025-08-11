@@ -3,6 +3,7 @@ import CounterBar from "@/components/CounterBar";
 import { toast } from "@/hooks/use-toast";
 import ExpenseForm from "@/components/ExpenseForm";
 import ExpenseCalendar from "@/components/ExpenseCalendar";
+import MonthNavigation from "@/components/MonthNavigation";
 
 // Tipos
 type Person = "Carlos" | "Gabreilly";
@@ -100,15 +101,35 @@ const [dateStr, setDateStr] = useState<string>(todayStr());
 
   const counts = useMemo(() => {
     const byType: Record<ExpenseType, number> = { Ifood: 0, Restaurante: 0 };
-    for (const e of expenses) byType[e.type] += 1;
-    return byType;
+    const totalsByType: Record<ExpenseType, number> = { Ifood: 0, Restaurante: 0 };
+    
+    for (const e of expenses) {
+      byType[e.type] += 1;
+      totalsByType[e.type] += e.amount;
+    }
+    
+    return { byType, totalsByType };
   }, [expenses]);
+
+  const handleMonthChange = (newMonth: string) => {
+    setCurrentMonth(newMonth);
+    const saved = localStorage.getItem(EXPENSES_KEY(newMonth));
+    setExpenses(saved ? (JSON.parse(saved) as Expense[]) : []);
+  };
+
+  const handleDateSelect = (date: string) => {
+    setDateStr(date);
+    toast({
+      title: "Data selecionada",
+      description: `Data ${new Date(date + 'T12:00:00').toLocaleDateString("pt-BR")} configurada no formulário`,
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // valida limites (por unidade)
-    const nextCount = counts[type] + 1;
+    const nextCount = counts.byType[type] + 1;
     if (nextCount > LIMITS[type]) {
       toast({
         title: "Limite atingido",
@@ -146,12 +167,27 @@ const newExpense: Expense = {
           Controle de Gastos Mensais
         </h1>
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <CounterBar label="Ifood" count={counts.Ifood} limit={LIMITS.Ifood} />
+          <CounterBar label="Ifood" count={counts.byType.Ifood} limit={LIMITS.Ifood} />
           <CounterBar
             label="Restaurante"
-            count={counts.Restaurante}
+            count={counts.byType.Restaurante}
             limit={LIMITS.Restaurante}
           />
+        </section>
+        
+        <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          <div className="rounded-lg border border-border bg-card p-4 text-center">
+            <div className="text-sm text-muted-foreground">Total Ifood</div>
+            <div className="text-lg font-semibold text-foreground">
+              {counts.totalsByType.Ifood.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </div>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-4 text-center">
+            <div className="text-sm text-muted-foreground">Total Restaurante</div>
+            <div className="text-lg font-semibold text-foreground">
+              {counts.totalsByType.Restaurante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </div>
+          </div>
         </section>
       </header>
 
@@ -171,7 +207,12 @@ const newExpense: Expense = {
         </section>
 
         <section aria-label="Calendário do mês" className="rounded-lg border border-border bg-card p-4 sm:p-6">
-          <ExpenseCalendar expenses={expenses} currentMonth={currentMonth} />
+          <MonthNavigation currentMonth={currentMonth} onMonthChange={handleMonthChange} />
+          <ExpenseCalendar 
+            expenses={expenses} 
+            currentMonth={currentMonth} 
+            onDateSelect={handleDateSelect}
+          />
         </section>
         <section aria-label="Lista de gastos" className="space-y-3">
           <h2 className="text-base font-medium text-foreground">

@@ -16,11 +16,20 @@ function ymd(d: Date) {
 export default function ExpenseCalendar({
   expenses,
   currentMonth,
+  onDateSelect,
 }: {
   expenses: Expense[];
   currentMonth: string; // YYYY-MM
+  onDateSelect?: (date: string) => void;
 }) {
   const [year, month] = currentMonth.split("-").map(Number);
+  
+  const formatDateForInput = (day: number) => {
+    const yyyy = year;
+    const mm = String(month).padStart(2, "0");
+    const dd = String(day).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
   
   // Obter o primeiro dia da semana e total de dias no mês
   const firstDay = new Date(year, month - 1, 1);
@@ -52,11 +61,6 @@ export default function ExpenseCalendar({
 
   return (
     <div className="w-full">
-      <div className="mb-4 text-center">
-        <h2 className="text-lg font-semibold text-foreground">
-          GASTOS DE {monthNames[month - 1].toUpperCase()} {year}
-        </h2>
-      </div>
       
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-border">
@@ -87,7 +91,14 @@ export default function ExpenseCalendar({
                   return (
                     <td
                       key={dayIndex}
-                      className="border border-border p-1 align-top min-h-[80px] h-20 w-[120px]"
+                      className={`border border-border p-1 align-top min-h-[80px] h-20 w-[120px] ${
+                        isValidDay && onDateSelect ? "cursor-pointer hover:bg-muted/50 transition-colors" : ""
+                      }`}
+                      onClick={() => {
+                        if (isValidDay && onDateSelect) {
+                          onDateSelect(formatDateForInput(dayNumber));
+                        }
+                      }}
                     >
                       {isValidDay && (
                         <div className="h-full">
