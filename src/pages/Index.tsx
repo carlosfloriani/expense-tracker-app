@@ -161,38 +161,29 @@ const newExpense: Expense = {
     });
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="container py-8 space-y-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          Controle de Gastos Mensais
-        </h1>
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <CounterBar label="Ifood" count={counts.byType.Ifood} limit={LIMITS.Ifood} />
-          <CounterBar
-            label="Restaurante"
-            count={counts.byType.Restaurante}
-            limit={LIMITS.Restaurante}
-          />
-        </section>
-        
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-          <div className="rounded-lg border border-border bg-card p-4 text-center">
-            <div className="text-sm text-muted-foreground">Total Ifood</div>
-            <div className="text-lg font-semibold text-foreground">
-              {counts.totalsByType.Ifood.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </div>
+    <div className="min-h-screen bg-background pb-safe">
+      {/* Header fixo */}
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="container py-4 space-y-4">
+          <h1 className="text-xl font-semibold tracking-tight text-foreground text-center">
+            Soft Spend Diary
+          </h1>
+          
+          {/* Contadores em linha */}
+          <div className="grid grid-cols-2 gap-3">
+            <CounterBar label="Ifood" count={counts.byType.Ifood} limit={LIMITS.Ifood} />
+            <CounterBar
+              label="Restaurante"
+              count={counts.byType.Restaurante}
+              limit={LIMITS.Restaurante}
+            />
           </div>
-          <div className="rounded-lg border border-border bg-card p-4 text-center">
-            <div className="text-sm text-muted-foreground">Total Restaurante</div>
-            <div className="text-lg font-semibold text-foreground">
-              {counts.totalsByType.Restaurante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </div>
-          </div>
-        </section>
+        </div>
       </header>
 
-      <main className="container pb-16 space-y-8" role="main">
-        <section aria-label="Formulário de novo gasto" className="rounded-lg border border-border bg-card p-4 sm:p-6">
+      <main className="container py-4 space-y-6" role="main">
+        {/* Formulário */}
+        <section aria-label="Formulário de novo gasto" className="rounded-2xl border border-border bg-card p-4">
           <ExpenseForm
             amount={amount}
             setAmount={setAmount}
@@ -206,33 +197,64 @@ const newExpense: Expense = {
           />
         </section>
 
-        <section aria-label="Calendário do mês" className="rounded-lg border border-border bg-card p-4 sm:p-6">
+        {/* Navegação do mês */}
+        <section>
           <MonthNavigation currentMonth={currentMonth} onMonthChange={handleMonthChange} />
+        </section>
+
+        {/* Calendário */}
+        <section aria-label="Calendário do mês" className="rounded-2xl border border-border bg-card p-4 overflow-hidden">
           <ExpenseCalendar 
             expenses={expenses} 
             currentMonth={currentMonth} 
             onDateSelect={handleDateSelect}
           />
         </section>
-        <section aria-label="Lista de gastos" className="space-y-3">
-          <h2 className="text-base font-medium text-foreground">
-            Gastos do mês ({currentMonth})
+
+        {/* Totais */}
+        <section className="grid grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-border bg-card p-4 text-center">
+            <div className="text-xs text-muted-foreground uppercase tracking-wide">Total Ifood</div>
+            <div className="text-lg font-bold text-foreground mt-1">
+              {counts.totalsByType.Ifood.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-border bg-card p-4 text-center">
+            <div className="text-xs text-muted-foreground uppercase tracking-wide">Total Restaurante</div>
+            <div className="text-lg font-bold text-foreground mt-1">
+              {counts.totalsByType.Restaurante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </div>
+          </div>
+        </section>
+        
+        {/* Lista de gastos */}
+        <section aria-label="Lista de gastos" className="space-y-3 pb-6">
+          <h2 className="text-sm font-medium text-muted-foreground px-1">
+            Gastos de {currentMonth}
           </h2>
           {expenses.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Sem gastos neste mês.</p>
+            <div className="rounded-2xl border border-border bg-card p-8 text-center">
+              <p className="text-sm text-muted-foreground">Nenhum gasto registrado este mês</p>
+            </div>
           ) : (
-            <ul className="divide-y divide-border rounded-lg border border-border bg-card">
+            <div className="space-y-2">
               {expenses.map((e) => (
-                <li key={e.id} className="flex items-center justify-between p-3">
-                  <div className="flex items-center gap-3 text-sm">
-                    <span className="text-muted-foreground">{formatDate(e.date)}</span>
-                    <span className="text-foreground">{e.person}</span>
-                    <span className="text-muted-foreground">•</span>
-                    <span className="text-foreground">{e.type}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="text-sm font-medium text-foreground">
-                      {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                <div key={e.id} className="rounded-2xl border border-border bg-card p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        e.person === "Carlos" ? "bg-personCarlos" : "bg-personGaby"
+                      }`} />
+                      <div className="text-sm">
+                        <div className="font-medium text-foreground">{e.person}</div>
+                        <div className="text-muted-foreground">{formatDate(e.date)}</div>
+                      </div>
+                      <div className="text-sm">
+                        <div className="font-medium text-foreground">{e.type}</div>
+                        <div className="text-muted-foreground">
+                          {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                        </div>
+                      </div>
                     </div>
                     <button
                       onClick={() => {
@@ -242,15 +264,15 @@ const newExpense: Expense = {
                           description: "O gasto foi excluído com sucesso.",
                         });
                       }}
-                      className="text-muted-foreground hover:text-destructive transition-colors p-1"
+                      className="text-muted-foreground hover:text-destructive transition-colors p-2 rounded-full hover:bg-destructive/10"
                       aria-label="Excluir gasto"
                     >
                       ✕
                     </button>
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </section>
       </main>

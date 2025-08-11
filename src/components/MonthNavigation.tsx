@@ -27,18 +27,18 @@ export default function MonthNavigation({ currentMonth, onMonthChange }: Props) 
   };
   
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex items-center justify-between">
       <Button
         variant="outline"
         size="sm"
         onClick={handlePrevMonth}
-        className="rounded-full"
+        className="rounded-full h-10 w-10 p-0"
         aria-label="Mês anterior"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
       
-      <h2 className="text-lg font-semibold text-foreground">
+      <h2 className="text-base font-semibold text-foreground">
         {monthNames[month - 1]} {year}
       </h2>
       
@@ -46,7 +46,7 @@ export default function MonthNavigation({ currentMonth, onMonthChange }: Props) 
         variant="outline"
         size="sm"
         onClick={handleNextMonth}
-        className="rounded-full"
+        className="rounded-full h-10 w-10 p-0"
         aria-label="Próximo mês"
       >
         <ChevronRight className="h-4 w-4" />

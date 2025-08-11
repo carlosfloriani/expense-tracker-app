@@ -26,56 +26,60 @@ export default function ExpenseForm({
   onSubmit,
 }: Props) {
   return (
-    <form onSubmit={onSubmit} className="flex flex-wrap items-end gap-3">
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-muted-foreground">quem gastou</label>
-        <ToggleGroup
-          type="single"
-          value={person}
-          onValueChange={(v) => v && setPerson(v as Props["person"])}
-          className="flex gap-2"
-        >
-          {["Carlos", "Gabreilly"].map((p) => (
-            <ToggleGroupItem
-              key={p}
-              value={p}
-              aria-label={`Pessoa ${p}`}
-              className={`rounded-full px-4 py-2 text-sm ${
-                p === "Carlos" 
-                  ? "data-[state=on]:bg-personCarlos data-[state=on]:text-personCarlos-foreground" 
-                  : "data-[state=on]:bg-personGaby data-[state=on]:text-personGaby-foreground"
-              }`}
-            >
-              {p}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
+    <form onSubmit={onSubmit} className="space-y-4">
+      {/* Linha 1: Pessoa e Data */}
+      <div className="flex gap-3">
+        <div className="flex-1">
+          <label className="block text-xs font-medium text-muted-foreground mb-2">quem gastou</label>
+          <ToggleGroup
+            type="single"
+            value={person}
+            onValueChange={(v) => v && setPerson(v as Props["person"])}
+            className="grid grid-cols-2 gap-2 w-full"
+          >
+            {["Carlos", "Gabreilly"].map((p) => (
+              <ToggleGroupItem
+                key={p}
+                value={p}
+                aria-label={`Pessoa ${p}`}
+                className={`rounded-xl py-3 text-sm font-medium transition-all ${
+                  p === "Carlos" 
+                    ? "data-[state=on]:bg-personCarlos data-[state=on]:text-personCarlos-foreground" 
+                    : "data-[state=on]:bg-personGaby data-[state=on]:text-personGaby-foreground"
+                } data-[state=off]:bg-muted data-[state=off]:text-muted-foreground`}
+              >
+                {p}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+        
+        <div className="flex-1">
+          <label className="block text-xs font-medium text-muted-foreground mb-2">data</label>
+          <Input
+            type="date"
+            value={dateStr}
+            onChange={(e) => setDateStr(e.target.value)}
+            className="h-12 rounded-xl border-muted text-center font-medium"
+          />
+        </div>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-muted-foreground">dia</label>
-        <Input
-          type="date"
-          value={dateStr}
-          onChange={(e) => setDateStr(e.target.value)}
-          className="h-10 w-[150px]"
-        />
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-muted-foreground">quantidade</label>
+      {/* Linha 2: Quantidade */}
+      <div>
+        <label className="block text-xs font-medium text-muted-foreground mb-2">quantidade</label>
         <ToggleGroup
           type="single"
           value={String(amount)}
           onValueChange={(v) => v && setAmount(parseFloat(v))}
-          className="flex gap-2"
+          className="grid grid-cols-4 gap-2 w-full"
         >
           {[0.25, 0.5, 0.75, 1].map((v) => (
             <ToggleGroupItem
               key={v}
               value={String(v)}
               aria-label={`Valor ${v}`}
-              className="rounded-full px-4 py-2 text-sm data-[state=on]:bg-accent data-[state=on]:text-accent-foreground"
+              className="rounded-xl py-3 text-sm font-medium data-[state=on]:bg-accent data-[state=on]:text-accent-foreground data-[state=off]:bg-muted data-[state=off]:text-muted-foreground"
             >
               {v.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </ToggleGroupItem>
@@ -83,30 +87,31 @@ export default function ExpenseForm({
         </ToggleGroup>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-muted-foreground">tipo</label>
-        <ToggleGroup
-          type="single"
-          value={type}
-          onValueChange={(v) => v && setType(v as Props["type"])}
-          className="flex gap-2"
-        >
-          {["Ifood", "Restaurante"].map((t) => (
-            <ToggleGroupItem
-              key={t}
-              value={t}
-              aria-label={`Tipo ${t}`}
-              className="rounded-full px-4 py-2 text-sm data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground"
-            >
-              {t}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-      </div>
-
-      <div className="ml-auto">
-        <Button type="submit" className="rounded-full">
-          enviar
+      {/* Linha 3: Tipo e Botão */}
+      <div className="flex gap-3 items-end">
+        <div className="flex-1">
+          <label className="block text-xs font-medium text-muted-foreground mb-2">tipo</label>
+          <ToggleGroup
+            type="single"
+            value={type}
+            onValueChange={(v) => v && setType(v as Props["type"])}
+            className="grid grid-cols-2 gap-2 w-full"
+          >
+            {["Ifood", "Restaurante"].map((t) => (
+              <ToggleGroupItem
+                key={t}
+                value={t}
+                aria-label={`Tipo ${t}`}
+                className="rounded-xl py-3 text-sm font-medium data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground data-[state=off]:bg-muted data-[state=off]:text-muted-foreground"
+              >
+                {t}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+        
+        <Button type="submit" className="rounded-xl px-8 py-3 h-12 font-medium">
+          Adicionar
         </Button>
       </div>
     </form>

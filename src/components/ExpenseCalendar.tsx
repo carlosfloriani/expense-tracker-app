@@ -62,15 +62,15 @@ export default function ExpenseCalendar({
   return (
     <div className="w-full">
       
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-border">
+      <div className="overflow-x-auto -mx-4 px-4">
+        <table className="w-full border-collapse border border-border min-w-[700px]">
           {/* Cabeçalho com dias da semana */}
           <thead>
             <tr>
               {weekDays.map((day) => (
                 <th
                   key={day}
-                  className="border border-border bg-muted/50 p-2 text-center text-sm font-medium text-muted-foreground min-w-[120px]"
+                  className="border border-border bg-muted/30 p-2 text-center text-xs font-medium text-muted-foreground min-w-[100px]"
                 >
                   {day}
                 </th>
@@ -91,8 +91,8 @@ export default function ExpenseCalendar({
                   return (
                     <td
                       key={dayIndex}
-                      className={`border border-border p-1 align-top min-h-[80px] h-20 w-[120px] ${
-                        isValidDay && onDateSelect ? "cursor-pointer hover:bg-muted/50 transition-colors" : ""
+                      className={`border border-border p-1 align-top min-h-[60px] h-16 w-[100px] ${
+                        isValidDay && onDateSelect ? "cursor-pointer hover:bg-muted/30 transition-colors" : ""
                       }`}
                       onClick={() => {
                         if (isValidDay && onDateSelect) {
@@ -102,14 +102,14 @@ export default function ExpenseCalendar({
                     >
                       {isValidDay && (
                         <div className="h-full">
-                          <div className="mb-1 text-sm font-medium text-muted-foreground">
+                          <div className="mb-1 text-xs font-medium text-muted-foreground">
                             {dayNumber}
                           </div>
                           <div className="space-y-1">
                             {dayExpenses.map((expense) => (
                               <div
                                 key={expense.id}
-                                className={`px-2 py-1 rounded text-xs font-medium text-center ${
+                                className={`px-1 py-0.5 rounded text-xs font-medium text-center ${
                                   expense.person === "Carlos"
                                     ? "bg-personCarlos text-personCarlos-foreground"
                                     : "bg-personGaby text-personGaby-foreground"
@@ -130,13 +130,13 @@ export default function ExpenseCalendar({
         </table>
       </div>
       
-      <div className="mt-4 flex items-center justify-center gap-6 text-sm">
+      <div className="mt-4 flex items-center justify-center gap-4 text-xs">
         <div className="flex items-center gap-2">
-          <span className="h-3 w-6 rounded bg-personCarlos" />
+          <span className="h-2 w-4 rounded bg-personCarlos" />
           <span className="text-muted-foreground">Carlos</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-3 w-6 rounded bg-personGaby" />
+          <span className="h-2 w-4 rounded bg-personGaby" />
           <span className="text-muted-foreground">Gabreilly</span>
         </div>
       </div>
