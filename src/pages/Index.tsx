@@ -4,18 +4,7 @@ import { toast } from "@/hooks/use-toast";
 import ExpenseForm from "@/components/ExpenseForm";
 import ExpenseCalendar from "@/components/ExpenseCalendar";
 import MonthNavigation from "@/components/MonthNavigation";
-
-// Tipos
-type Person = "Carlos" | "Gabreilly";
-type ExpenseType = "Ifood" | "Restaurante";
-
-interface Expense {
-  id: string;
-  date: string; // ISO
-  amount: number; // unidades (0.25, 0.5, 0.75, 1)
-  person: Person;
-  type: ExpenseType;
-}
+import { useExpenses, type Person, type ExpenseType } from "@/hooks/useExpenses";
 
 const LIMITS: Record<ExpenseType, number> = {
   Ifood: 10,
@@ -45,22 +34,17 @@ const toIsoFromLocalDate = (ymd: string) => {
 
 const Index = () => {
   const [currentMonth, setCurrentMonth] = useState<string>(monthKey());
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const { expenses, loading, addExpense, deleteExpense } = useExpenses(currentMonth);
 
-// Estados do formulário
-const [amount, setAmount] = useState<number>(1);
-const [person, setPerson] = useState<Person>("Carlos");
-const [type, setType] = useState<ExpenseType>("Ifood"); // pré-selecionado
-const [dateStr, setDateStr] = useState<string>(todayStr());
+  // Estados do formulário
+  const [amount, setAmount] = useState<number>(1);
+  const [person, setPerson] = useState<Person>("Carlos");
+  const [type, setType] = useState<ExpenseType>("Ifood");
+  const [dateStr, setDateStr] = useState<string>(todayStr());
 
-  // Carregar dados do mês atual
+  // Carregar defaults do formulário do localStorage
   useEffect(() => {
-    const m = monthKey();
-    setCurrentMonth(m);
-    const saved = localStorage.getItem(EXPENSES_KEY(m));
-    setExpenses(saved ? (JSON.parse(saved) as Expense[]) : []);
-
-    const defaultsRaw = localStorage.getItem(DEFAULTS_KEY(m));
+    const defaultsRaw = localStorage.getItem(DEFAULTS_KEY(currentMonth));
     if (defaultsRaw) {
       try {
         const d = JSON.parse(defaultsRaw);
@@ -69,35 +53,15 @@ const [dateStr, setDateStr] = useState<string>(todayStr());
         if (d.type) setType(d.type);
       } catch {}
     }
-  }, []);
-
-  // Persistir gastos sempre que mudar
-  useEffect(() => {
-    const m = currentMonth;
-    localStorage.setItem(EXPENSES_KEY(m), JSON.stringify(expenses));
-  }, [expenses, currentMonth]);
+  }, [currentMonth]);
 
   // Persistir defaults do formulário
   useEffect(() => {
-    const m = currentMonth;
     localStorage.setItem(
-      DEFAULTS_KEY(m),
+      DEFAULTS_KEY(currentMonth),
       JSON.stringify({ amount, person, type })
     );
   }, [amount, person, type, currentMonth]);
-
-  // Caso o mês mude enquanto app está aberto
-  useEffect(() => {
-    const id = setInterval(() => {
-      const m = monthKey();
-      if (m !== currentMonth) {
-        setCurrentMonth(m);
-        const saved = localStorage.getItem(EXPENSES_KEY(m));
-        setExpenses(saved ? (JSON.parse(saved) as Expense[]) : []);
-      }
-    }, 60_000); // checa a cada minuto
-    return () => clearInterval(id);
-  }, [currentMonth]);
 
   const counts = useMemo(() => {
     const byType: Record<ExpenseType, number> = { Ifood: 0, Restaurante: 0 };
@@ -113,8 +77,6 @@ const [dateStr, setDateStr] = useState<string>(todayStr());
 
   const handleMonthChange = (newMonth: string) => {
     setCurrentMonth(newMonth);
-    const saved = localStorage.getItem(EXPENSES_KEY(newMonth));
-    setExpenses(saved ? (JSON.parse(saved) as Expense[]) : []);
   };
 
   const handleDateSelect = (date: string) => {
@@ -125,7 +87,7 @@ const [dateStr, setDateStr] = useState<string>(todayStr());
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // valida limites (por unidade)
@@ -139,19 +101,14 @@ const [dateStr, setDateStr] = useState<string>(todayStr());
       return;
     }
 
-const newExpense: Expense = {
-      id: crypto.randomUUID(),
+    const newExpense = {
       date: toIsoFromLocalDate(dateStr),
       amount,
       person,
       type,
     };
-    setExpenses((prev) => [newExpense, ...prev]);
-
-    toast({
-      title: "Gasto adicionado",
-      description: `${type} • ${person} • ${amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
-    });
+    
+    await addExpense(newExpense);
   };
 
   const formatDate = (iso: string) =>
@@ -257,13 +214,7 @@ const newExpense: Expense = {
                       </div>
                     </div>
                     <button
-                      onClick={() => {
-                        setExpenses(prev => prev.filter(expense => expense.id !== e.id));
-                        toast({
-                          title: "Gasto removido",
-                          description: "O gasto foi excluído com sucesso.",
-                        });
-                      }}
+                      onClick={() => deleteExpense(e.id)}
                       className="text-muted-foreground hover:text-destructive transition-colors p-2 rounded-full hover:bg-destructive/10"
                       aria-label="Excluir gasto"
                     >

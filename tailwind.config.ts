@@ -80,6 +80,14 @@ export default {
 				personGaby: {
 					DEFAULT: 'hsl(var(--person-gabreilly))',
 					foreground: 'hsl(var(--person-gabreilly-foreground))'
+				},
+				ifood: {
+					DEFAULT: 'hsl(var(--type-ifood))',
+					foreground: 'hsl(var(--type-ifood-foreground))'
+				},
+				restaurante: {
+					DEFAULT: 'hsl(var(--type-restaurante))',
+					foreground: 'hsl(var(--type-restaurante-foreground))'
 				}
 			},
 			borderRadius: {

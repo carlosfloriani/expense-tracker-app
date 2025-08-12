@@ -102,7 +102,11 @@ export default function ExpenseForm({
                 key={t}
                 value={t}
                 aria-label={`Tipo ${t}`}
-                className="rounded-xl py-3 text-sm font-medium data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground data-[state=off]:bg-muted data-[state=off]:text-muted-foreground"
+                className={`rounded-xl py-3 text-sm font-medium transition-all ${
+                  t === "Ifood" 
+                    ? "data-[state=on]:bg-ifood data-[state=on]:text-ifood-foreground" 
+                    : "data-[state=on]:bg-restaurante data-[state=on]:text-restaurante-foreground"
+                } data-[state=off]:bg-muted data-[state=off]:text-muted-foreground`}
               >
                 {t}
               </ToggleGroupItem>

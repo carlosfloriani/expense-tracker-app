@@ -115,7 +115,7 @@ export default function ExpenseCalendar({
                                     : "bg-personGaby text-personGaby-foreground"
                                 }`}
                               >
-                                {expense.amount}
+                                {expense.person.charAt(0)}-{expense.amount}-{expense.type.toLowerCase()}
                               </div>
                             ))}
                           </div>
