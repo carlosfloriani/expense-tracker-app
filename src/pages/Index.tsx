@@ -34,7 +34,7 @@ const toIsoFromLocalDate = (ymd: string) => {
 
 const Index = () => {
   const [currentMonth, setCurrentMonth] = useState<string>(monthKey());
-  const { expenses, loading, addExpense, deleteExpense } = useExpenses(currentMonth);
+  const { expenses, loading, addExpense, deleteExpense } = useExpenses();
 
   // Estados do formulário
   const [amount, setAmount] = useState<number>(1);
@@ -63,17 +63,26 @@ const Index = () => {
     );
   }, [amount, person, type, currentMonth]);
 
+  // Filtrar gastos do mês atual
+  const currentMonthExpenses = useMemo(() => {
+    return expenses.filter(expense => {
+      const expenseDate = new Date(expense.date);
+      const [year, month] = currentMonth.split("-").map(Number);
+      return expenseDate.getFullYear() === year && expenseDate.getMonth() === month - 1;
+    });
+  }, [expenses, currentMonth]);
+
   const counts = useMemo(() => {
     const byType: Record<ExpenseType, number> = { Ifood: 0, Restaurante: 0 };
     const totalsByType: Record<ExpenseType, number> = { Ifood: 0, Restaurante: 0 };
     
-    for (const e of expenses) {
+    for (const e of currentMonthExpenses) {
       byType[e.type] += 1;
       totalsByType[e.type] += e.amount;
     }
     
     return { byType, totalsByType };
-  }, [expenses]);
+  }, [currentMonthExpenses]);
 
   const handleMonthChange = (newMonth: string) => {
     setCurrentMonth(newMonth);
@@ -162,7 +171,7 @@ const Index = () => {
         {/* Calendário */}
         <section aria-label="Calendário do mês" className="rounded-2xl border border-border bg-card p-4 overflow-hidden">
           <ExpenseCalendar 
-            expenses={expenses} 
+            expenses={currentMonthExpenses} 
             currentMonth={currentMonth} 
             onDateSelect={handleDateSelect}
           />
@@ -189,13 +198,17 @@ const Index = () => {
           <h2 className="text-sm font-medium text-muted-foreground px-1">
             Gastos de {currentMonth}
           </h2>
-          {expenses.length === 0 ? (
+          {loading ? (
+            <div className="rounded-2xl border border-border bg-card p-8 text-center">
+              <p className="text-sm text-muted-foreground">Carregando gastos...</p>
+            </div>
+          ) : currentMonthExpenses.length === 0 ? (
             <div className="rounded-2xl border border-border bg-card p-8 text-center">
               <p className="text-sm text-muted-foreground">Nenhum gasto registrado este mês</p>
             </div>
           ) : (
             <div className="space-y-2">
-              {expenses.map((e) => (
+              {currentMonthExpenses.map((e) => (
                 <div key={e.id} className="rounded-2xl border border-border bg-card p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

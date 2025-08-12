@@ -110,10 +110,11 @@ export default function ExpenseCalendar({
                               <div
                                 key={expense.id}
                                 className={`px-1 py-0.5 rounded text-xs font-medium text-center ${
-                                  expense.person === "Carlos"
-                                    ? "bg-personCarlos text-personCarlos-foreground"
-                                    : "bg-personGaby text-personGaby-foreground"
+                                  expense.type === "Ifood"
+                                    ? "bg-ifood text-ifood-foreground"
+                                    : "bg-restaurante text-restaurante-foreground"
                                 }`}
+                                title={`${expense.person} - ${expense.type} - ${expense.amount}`}
                               >
                                 {expense.person.charAt(0)}-{expense.amount}-{expense.type.toLowerCase()}
                               </div>
