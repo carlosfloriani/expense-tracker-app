@@ -17,10 +17,12 @@ export default function ExpenseCalendar({
   expenses,
   currentMonth,
   onDateSelect,
+  onDeleteExpense,
 }: {
   expenses: Expense[];
   currentMonth: string; // YYYY-MM
   onDateSelect?: (date: string) => void;
+  onDeleteExpense?: (id: string) => void;
 }) {
   const [year, month] = currentMonth.split("-").map(Number);
   
@@ -109,14 +111,24 @@ export default function ExpenseCalendar({
                             {dayExpenses.map((expense) => (
                               <div
                                 key={expense.id}
-                                className={`px-1 py-0.5 rounded text-xs font-medium text-center ${
+                                className={`relative px-1 py-0.5 rounded text-xs font-medium text-center flex items-center justify-between group ${
                                   expense.type === "Ifood"
-                                    ? "bg-ifood text-ifood-foreground"
-                                    : "bg-restaurante text-restaurante-foreground"
+                                    ? `bg-gradient-to-r ${expense.person === "Carlos" ? "from-personCarlos to-ifood" : "from-personGaby to-ifood"} text-white`
+                                    : `bg-gradient-to-r ${expense.person === "Carlos" ? "from-personCarlos to-restaurante" : "from-personGaby to-restaurante"} text-white`
                                 }`}
                                 title={`${expense.person} - ${expense.type} - ${expense.amount}`}
                               >
-                                {expense.person.charAt(0)}-{expense.amount}-{expense.type.toLowerCase()}
+                                <span className="flex-1">{expense.person.charAt(0)}-{expense.amount}-{expense.type.toLowerCase()}</span>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onDeleteExpense?.(expense.id);
+                                  }}
+                                  className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity text-white hover:text-red-200"
+                                  title="Excluir gasto"
+                                >
+                                  ✕
+                                </button>
                               </div>
                             ))}
                           </div>

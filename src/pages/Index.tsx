@@ -137,12 +137,36 @@ const Index = () => {
           
           {/* Contadores em linha */}
           <div className="grid grid-cols-2 gap-3">
-            <CounterBar label="Ifood" count={counts.byType.Ifood} limit={LIMITS.Ifood} />
-            <CounterBar
-              label="Restaurante"
-              count={counts.byType.Restaurante}
-              limit={LIMITS.Restaurante}
-            />
+            <div className="space-y-2">
+              <CounterBar label="Ifood" count={counts.byType.Ifood} limit={LIMITS.Ifood} />
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
+                  <div className="text-muted-foreground">Carlos</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                </div>
+                <div className="bg-personGaby/10 rounded-lg p-2 text-center">
+                  <div className="text-muted-foreground">Gabreilly</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabreilly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <CounterBar
+                label="Restaurante"
+                count={counts.byType.Restaurante}
+                limit={LIMITS.Restaurante}
+              />
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
+                  <div className="text-muted-foreground">Carlos</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                </div>
+                <div className="bg-personGaby/10 rounded-lg p-2 text-center">
+                  <div className="text-muted-foreground">Gabreilly</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabreilly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -174,6 +198,7 @@ const Index = () => {
             expenses={currentMonthExpenses} 
             currentMonth={currentMonth} 
             onDateSelect={handleDateSelect}
+            onDeleteExpense={deleteExpense}
           />
         </section>
 

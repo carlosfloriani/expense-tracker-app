@@ -30,7 +30,7 @@ export default function ExpenseForm({
       {/* Linha 1: Pessoa e Data */}
       <div className="flex gap-3">
         <div className="flex-1">
-          <label className="block text-xs font-medium text-muted-foreground mb-2">quem gastou</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-2">Quem Gastou</label>
           <ToggleGroup
             type="single"
             value={person}
@@ -55,19 +55,19 @@ export default function ExpenseForm({
         </div>
         
         <div className="flex-1">
-          <label className="block text-xs font-medium text-muted-foreground mb-2">data</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-2">Data</label>
           <Input
             type="date"
             value={dateStr}
             onChange={(e) => setDateStr(e.target.value)}
-            className="h-12 rounded-xl border-muted text-center font-medium"
+            className="h-12 rounded-xl border-muted text-center font-medium [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:hue-rotate-[270deg] [&::-webkit-calendar-picker-indicator]:saturate-150"
           />
         </div>
       </div>
 
       {/* Linha 2: Quantidade */}
       <div>
-        <label className="block text-xs font-medium text-muted-foreground mb-2">quantidade</label>
+        <label className="block text-xs font-medium text-muted-foreground mb-2">Quantidade</label>
         <ToggleGroup
           type="single"
           value={String(amount)}
@@ -90,7 +90,7 @@ export default function ExpenseForm({
       {/* Linha 3: Tipo e Botão */}
       <div className="flex gap-3 items-end">
         <div className="flex-1">
-          <label className="block text-xs font-medium text-muted-foreground mb-2">tipo</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-2">Tipo</label>
           <ToggleGroup
             type="single"
             value={type}
