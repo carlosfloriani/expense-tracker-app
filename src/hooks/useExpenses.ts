@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
-export type Person = "Carlos" | "Gabreilly";
+export type Person = "Carlos" | "Gabrielly";
 export type ExpenseType = "Ifood" | "Restaurante";
 
 export type Expense = {
@@ -16,23 +17,32 @@ export type Expense = {
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const { user } = useAuth();
 
   const fetchExpenses = async () => {
+    if (!user) {
+      setExpenses([]);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const { data, error } = await supabase
         .from('expenses')
         .select('*')
+        .eq('user_id', user.id)
         .order('date', { ascending: false });
 
       if (error) throw error;
 
       const formattedExpenses: Expense[] = data.map(expense => ({
         id: expense.id,
-        date: expense.date,
+        date: expense.date.split('T')[0], // Convert to YYYY-MM-DD format
         amount: parseFloat(expense.amount.toString()),
-        person: expense.person as "Carlos" | "Gabreilly",
-        type: expense.type as "Ifood" | "Restaurante"
+        person: expense.person as Person,
+        type: expense.type as ExpenseType
       }));
 
       setExpenses(formattedExpenses);
@@ -49,14 +59,24 @@ export const useExpenses = () => {
   };
 
   const addExpense = async (expense: Omit<Expense, 'id'>) => {
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Você precisa estar logado para adicionar gastos."
+      });
+      return { success: false };
+    }
+
     try {
       const { data, error } = await supabase
         .from('expenses')
         .insert([{
-          date: expense.date,
+          date: expense.date + 'T00:00:00.000Z', // Convert to full timestamp
           amount: expense.amount,
           person: expense.person,
-          type: expense.type
+          type: expense.type,
+          user_id: user.id
         }])
         .select()
         .single();
@@ -65,10 +85,10 @@ export const useExpenses = () => {
 
       const newExpense: Expense = {
         id: data.id,
-        date: data.date,
+        date: data.date.split('T')[0],
         amount: parseFloat(data.amount.toString()),
-        person: data.person as "Carlos" | "Gabreilly",
-        type: data.type as "Ifood" | "Restaurante"
+        person: data.person as Person,
+        type: data.type as ExpenseType
       };
 
       setExpenses(prev => [newExpense, ...prev]);
@@ -120,7 +140,7 @@ export const useExpenses = () => {
 
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [user]);
 
   return {
     expenses,

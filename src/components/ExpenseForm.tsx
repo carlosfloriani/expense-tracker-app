@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 type Props = {
   amount: number;
   setAmount: (v: number) => void;
-  person: "Carlos" | "Gabreilly";
-  setPerson: (p: "Carlos" | "Gabreilly") => void;
+  person: "Carlos" | "Gabrielly";
+  setPerson: (p: "Carlos" | "Gabrielly") => void;
   type: "Ifood" | "Restaurante";
   setType: (t: "Ifood" | "Restaurante") => void;
   dateStr: string;
@@ -37,7 +37,7 @@ export default function ExpenseForm({
             onValueChange={(v) => v && setPerson(v as Props["person"])}
             className="grid grid-cols-2 gap-2 w-full"
           >
-            {["Carlos", "Gabreilly"].map((p) => (
+            {["Carlos", "Gabrielly"].map((p) => (
               <ToggleGroupItem
                 key={p}
                 value={p}
@@ -48,7 +48,7 @@ export default function ExpenseForm({
                     : "data-[state=on]:bg-personGaby data-[state=on]:text-personGaby-foreground"
                 } data-[state=off]:bg-muted data-[state=off]:text-muted-foreground`}
               >
-                {p}
+                {p.charAt(0)}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
