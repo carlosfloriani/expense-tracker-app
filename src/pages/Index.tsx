@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CounterBar from "@/components/CounterBar";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 import ExpenseForm from "@/components/ExpenseForm";
 import ExpenseCalendar from "@/components/ExpenseCalendar";
 import MonthNavigation from "@/components/MonthNavigation";
@@ -35,6 +38,16 @@ const toIsoFromLocalDate = (ymd: string) => {
 const Index = () => {
   const [currentMonth, setCurrentMonth] = useState<string>(monthKey());
   const { expenses, loading, addExpense, deleteExpense } = useExpenses();
+  const { toast } = useToast();
+  const { user, loading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect to auth if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [user, authLoading, navigate]);
 
   // Estados do formulário
   const [amount, setAmount] = useState<number>(1);
@@ -131,9 +144,19 @@ const Index = () => {
       {/* Header fixo */}
       <header className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container py-4 space-y-4">
-          <h1 className="text-xl font-semibold tracking-tight text-foreground text-center">
-            Soft Spend Diary
-          </h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-semibold tracking-tight text-foreground flex-1 text-center">
+              Soft Spend Diary
+            </h1>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={signOut}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Sair
+            </Button>
+          </div>
           
           {/* Contadores em linha */}
           <div className="grid grid-cols-2 gap-3">
@@ -145,8 +168,8 @@ const Index = () => {
                   <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Gabreilly</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabreilly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="text-muted-foreground">Gabrielly</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -162,8 +185,8 @@ const Index = () => {
                   <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Gabreilly</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabreilly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="text-muted-foreground">Gabrielly</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
