@@ -2,7 +2,7 @@ type Expense = {
   id: string;
   date: string; // ISO
   amount: number;
-  person: "Carlos" | "Gabrielly";
+  person: "Carlos" | "Gabreilly";
   type: "Ifood" | "Restaurante";
 };
 
@@ -150,7 +150,7 @@ export default function ExpenseCalendar({
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-4 rounded bg-personGaby" />
-          <span className="text-muted-foreground">Gabrielly</span>
+          <span className="text-muted-foreground">Gabreilly</span>
         </div>
       </div>
     </div>
