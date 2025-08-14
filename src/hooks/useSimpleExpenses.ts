@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
 
 export type Person = "Carlos" | "Gabrielly";
 export type ExpenseType = "Ifood" | "Restaurante";
@@ -14,25 +13,17 @@ export type Expense = {
   type: ExpenseType;
 };
 
-export const useExpenses = () => {
+export const useSimpleExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const { user } = useAuth();
 
   const fetchExpenses = async () => {
-    if (!user) {
-      setExpenses([]);
-      setLoading(false);
-      return;
-    }
-
     try {
       setLoading(true);
       const { data, error } = await supabase
         .from('expenses')
         .select('*')
-        .eq('user_id', user.id)
         .order('date', { ascending: false });
 
       if (error) throw error;
@@ -59,15 +50,6 @@ export const useExpenses = () => {
   };
 
   const addExpense = async (expense: Omit<Expense, 'id'>) => {
-    if (!user) {
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "Você precisa estar logado para adicionar gastos."
-      });
-      return { success: false };
-    }
-
     try {
       const { data, error } = await supabase
         .from('expenses')
@@ -75,8 +57,7 @@ export const useExpenses = () => {
           date: expense.date + 'T00:00:00.000Z', // Convert to full timestamp
           amount: expense.amount,
           person: expense.person,
-          type: expense.type,
-          user_id: user.id
+          type: expense.type
         }])
         .select()
         .single();
@@ -95,7 +76,7 @@ export const useExpenses = () => {
       
       toast({
         title: "Gasto adicionado",
-        description: `${expense.type} • ${expense.person} • ${expense.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+        description: `${expense.type} • ${expense.person} • R$ ${expense.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
       });
 
       return { success: true };
@@ -140,7 +121,7 @@ export const useExpenses = () => {
 
   useEffect(() => {
     fetchExpenses();
-  }, [user]);
+  }, []);
 
   return {
     expenses,

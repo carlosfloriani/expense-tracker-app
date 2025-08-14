@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CounterBar from "@/components/CounterBar";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import { useSimpleAuth } from "@/contexts/SimpleAuthContext";
 import { Button } from "@/components/ui/button";
 import ExpenseForm from "@/components/ExpenseForm";
 import ExpenseCalendar from "@/components/ExpenseCalendar";
 import MonthNavigation from "@/components/MonthNavigation";
-import { useExpenses, type Person, type ExpenseType } from "@/hooks/useExpenses";
+import { useSimpleExpenses, type Person, type ExpenseType } from "@/hooks/useSimpleExpenses";
 
 const LIMITS: Record<ExpenseType, number> = {
   Ifood: 10,
@@ -37,21 +37,21 @@ const toIsoFromLocalDate = (ymd: string) => {
 
 const Index = () => {
   const [currentMonth, setCurrentMonth] = useState<string>(monthKey());
-  const { expenses, loading, addExpense, deleteExpense } = useExpenses();
+  const { expenses, loading, addExpense, deleteExpense } = useSimpleExpenses();
   const { toast } = useToast();
-  const { user, loading: authLoading, signOut } = useAuth();
+  const { isAuthenticated, loading: authLoading, logout } = useSimpleAuth();
   const navigate = useNavigate();
 
   // Redirect to auth if not logged in
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (!authLoading && !isAuthenticated) {
       navigate('/auth');
     }
-  }, [user, authLoading, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   // Estados do formulário
   const [amount, setAmount] = useState<number>(1);
-  const [person, setPerson] = useState<Person>("Carlos");
+  const [person, setPerson] = useState<Person>("Gabrielly");
   const [type, setType] = useState<ExpenseType>("Ifood");
   const [dateStr, setDateStr] = useState<string>(todayStr());
 
@@ -145,13 +145,16 @@ const Index = () => {
       <header className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container py-4 space-y-4">
           <div className="flex items-center justify-between">
+            <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
+              <span className="text-sm font-bold text-white">G</span>
+            </div>
             <h1 className="text-xl font-semibold tracking-tight text-foreground flex-1 text-center">
               Soft Spend Diary
             </h1>
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={signOut}
+              onClick={logout}
               className="text-muted-foreground hover:text-foreground"
             >
               Sair
@@ -165,11 +168,11 @@ const Index = () => {
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Carlos</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Gabrielly</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -182,11 +185,11 @@ const Index = () => {
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Carlos</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Gabrielly</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -230,13 +233,13 @@ const Index = () => {
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">Total Ifood</div>
             <div className="text-lg font-bold text-foreground mt-1">
-              {counts.totalsByType.Ifood.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              R$ {counts.totalsByType.Ifood.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </div>
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">Total Restaurante</div>
             <div className="text-lg font-bold text-foreground mt-1">
-              {counts.totalsByType.Restaurante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              R$ {counts.totalsByType.Restaurante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </div>
         </section>
@@ -270,7 +273,7 @@ const Index = () => {
                       <div className="text-sm">
                         <div className="font-medium text-foreground">{e.type}</div>
                         <div className="text-muted-foreground">
-                          {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          R$ {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                         </div>
                       </div>
                     </div>
