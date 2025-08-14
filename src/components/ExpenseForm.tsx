@@ -67,7 +67,7 @@ export default function ExpenseForm({
 
       {/* Linha 2: Quantidade */}
       <div>
-        <label className="block text-xs font-medium text-muted-foreground mb-2">Quantidade</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-2">Quantidade</label>
         <ToggleGroup
           type="single"
           value={String(amount)}
@@ -90,7 +90,7 @@ export default function ExpenseForm({
       {/* Linha 3: Tipo e Botão */}
       <div className="flex gap-3 items-end">
         <div className="flex-1">
-          <label className="block text-xs font-medium text-muted-foreground mb-2">Tipo</label>
+          <label className="block text-xs font-medium text-muted-foreground mb-2">Categoria</label>
           <ToggleGroup
             type="single"
             value={type}

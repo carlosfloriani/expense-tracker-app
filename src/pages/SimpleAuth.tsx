@@ -50,10 +50,10 @@ const SimpleAuth = () => {
             <span className="text-2xl font-bold text-white">G</span>
           </div>
           <CardTitle className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Soft Spend Diary
+            Olá, seja bem-vindo ao nosso espaço!
           </CardTitle>
           <CardDescription>
-            Olá Gabrielly, digite sua senha para continuar
+            Olá, digite sua senha para continuar!
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -168,11 +168,11 @@ const Index = () => {
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Carlos</div>
-                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Gabrielly</div>
-                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -185,11 +185,11 @@ const Index = () => {
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Carlos</div>
-                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Gabrielly</div>
-                  <div className="font-medium">R$ {currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -233,13 +233,13 @@ const Index = () => {
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">Total Ifood</div>
             <div className="text-lg font-bold text-foreground mt-1">
-              R$ {counts.totalsByType.Ifood.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              {counts.totalsByType.Ifood.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </div>
           <div className="rounded-2xl border border-border bg-card p-4 text-center">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">Total Restaurante</div>
             <div className="text-lg font-bold text-foreground mt-1">
-              R$ {counts.totalsByType.Restaurante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              {counts.totalsByType.Restaurante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </div>
         </section>
@@ -273,7 +273,7 @@ const Index = () => {
                       <div className="text-sm">
                         <div className="font-medium text-foreground">{e.type}</div>
                         <div className="text-muted-foreground">
-                          R$ {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          {e.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                         </div>
                       </div>
                     </div>

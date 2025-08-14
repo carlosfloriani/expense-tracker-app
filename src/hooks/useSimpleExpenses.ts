@@ -76,7 +76,7 @@ export const useSimpleExpenses = () => {
       
       toast({
         title: "Gasto adicionado",
-        description: `${expense.type} • ${expense.person} • R$ ${expense.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+        description: `${expense.type} • ${expense.person} • ${expense.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
       });
 
       return { success: true };
