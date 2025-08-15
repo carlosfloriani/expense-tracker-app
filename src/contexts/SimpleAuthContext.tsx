@@ -33,19 +33,17 @@ export const SimpleAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const login = async (password: string): Promise<boolean> => {
     try {
-      // Get password from database
-      const { data, error } = await supabase
-        .from('app_config')
-        .select('value')
-        .eq('key', 'app_password')
-        .single();
+      // Use secure edge function to verify password
+      const { data, error } = await supabase.functions.invoke('verify-password', {
+        body: { password }
+      });
 
       if (error) {
-        console.error('Error fetching password:', error);
+        console.error('Error verifying password:', error);
         return false;
       }
 
-      if (data.value === password) {
+      if (data?.success) {
         setIsAuthenticated(true);
         localStorage.setItem('simple_auth', 'true');
         return true;
