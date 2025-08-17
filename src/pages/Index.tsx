@@ -65,10 +65,14 @@ const Index = () => {
     if (defaultsRaw) {
       try {
         const d = JSON.parse(defaultsRaw);
-        if (d.amount) setAmount(d.amount);
-        if (d.person) setPerson(d.person);
-        if (d.type) setType(d.type);
-      } catch {}
+        if (d.amount && typeof d.amount === 'number') setAmount(d.amount);
+        if (d.person && (d.person === "Carlos" || d.person === "Gabrielly")) setPerson(d.person);
+        if (d.type && (d.type === "Ifood" || d.type === "Restaurante")) setType(d.type);
+      } catch (error) {
+        console.error('Error parsing localStorage defaults:', error);
+        // Clear corrupted data
+        localStorage.removeItem(DEFAULTS_KEY(currentMonth));
+      }
     }
   }, [currentMonth]);
 
@@ -127,6 +131,10 @@ const Index = () => {
       return;
     }
 
+    // Reset form after successful submission
+    setAmount(1);
+    setDateStr(todayStr());
+
     const newExpense = {
       date: toIsoFromLocalDate(dateStr),
       amount,
@@ -135,14 +143,14 @@ const Index = () => {
     };
     
     await addExpense(newExpense);
-  };
+    };
 
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
     });
-
+  
   return (
     <div className="min-h-screen bg-background pb-safe">
       {/* Header fixo */}

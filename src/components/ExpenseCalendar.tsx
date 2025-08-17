@@ -42,10 +42,10 @@ export default function ExpenseCalendar({
   // Organizar gastos por dia
   const expensesByDay = new Map<number, Expense[]>();
   for (const expense of expenses) {
-    const d = new Date(expense.date);
-    const key = ymd(d);
-    if (key.startsWith(currentMonth)) {
-      const day = d.getDate();
+    // expense.date is already in YYYY-MM-DD format, extract day directly
+    const expenseYearMonth = expense.date.substring(0, 7); // Get YYYY-MM part
+    if (expenseYearMonth === currentMonth) {
+      const day = parseInt(expense.date.substring(8, 10)); // Get DD part
       if (!expensesByDay.has(day)) expensesByDay.set(day, []);
       expensesByDay.get(day)!.push(expense);
     }

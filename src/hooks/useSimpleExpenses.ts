@@ -160,7 +160,12 @@ export const useSimpleExpenses = () => {
               person: newExpense.person as Person,
               type: newExpense.type as ExpenseType
             };
-            setExpenses(prev => [formattedExpense, ...prev]);
+            // Avoid duplicate entries by checking if expense already exists
+            setExpenses(prev => {
+              const exists = prev.some(exp => exp.id === formattedExpense.id);
+              if (exists) return prev;
+              return [formattedExpense, ...prev];
+            });
           } else if (payload.eventType === 'DELETE') {
             setExpenses(prev => prev.filter(expense => expense.id !== payload.old.id));
           } else if (payload.eventType === 'UPDATE') {
