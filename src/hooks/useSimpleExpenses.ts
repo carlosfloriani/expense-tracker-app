@@ -54,7 +54,7 @@ export const useSimpleExpenses = () => {
       const { data, error } = await supabase
         .from('expenses')
         .insert([{
-          date: expense.date + 'T00:00:00.000Z', // Convert to full timestamp
+          date: expense.date,
           amount: expense.amount,
           person: expense.person,
           type: expense.type
