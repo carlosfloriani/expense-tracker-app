@@ -176,7 +176,7 @@ const Index = () => {
           {/* Contadores em linha */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <CounterBar label="Ifood" count={counts.byType.Ifood} limit={LIMITS.Ifood} />
+              <CounterBar label="Ifood" count={counts.totalsByType.Ifood} limit={LIMITS.Ifood} />
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Carlos</div>
@@ -191,7 +191,7 @@ const Index = () => {
             <div className="space-y-2">
               <CounterBar
                 label="Restaurante"
-                count={counts.byType.Restaurante}
+                count={counts.totalsByType.Restaurante}
                 limit={LIMITS.Restaurante}
               />
               <div className="grid grid-cols-2 gap-2 text-xs">

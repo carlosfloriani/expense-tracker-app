@@ -22,7 +22,7 @@ const CounterBar: React.FC<CounterBarProps> = ({ label, count, limit }) => {
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span className="font-medium text-foreground">{label}</span>
         <span>
-          {count}/{limit}
+          {count.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}/{limit.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
         </span>
       </div>
       <div className="h-2.5 w-full rounded-full bg-muted/60 overflow-hidden">
