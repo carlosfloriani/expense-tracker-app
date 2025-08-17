@@ -31,8 +31,10 @@ const todayStr = () => {
 };
 
 const toIsoFromLocalDate = (ymd: string) => {
-  // Use 12:00 local time to avoid timezone shifts when converting to ISO
-  return new Date(`${ymd}T12:00:00`).toISOString();
+  // Simple approach: just return the date as YYYY-MM-DD
+  // The addExpense function will handle the conversion
+  console.log('Date input:', ymd);
+  return ymd;
 };
 
 const Index = () => {

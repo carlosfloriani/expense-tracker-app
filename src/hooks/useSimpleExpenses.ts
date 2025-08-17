@@ -51,10 +51,26 @@ export const useSimpleExpenses = () => {
 
   const addExpense = async (expense: Omit<Expense, 'id'>) => {
     try {
+      console.log('Adding expense with date:', expense.date);
+      
+      // Ensure the date is in the correct format
+      let formattedDate = expense.date;
+      if (typeof expense.date === 'string' && expense.date.includes('T')) {
+        // If it's already an ISO string, use it as is
+        formattedDate = expense.date;
+      } else {
+        // If it's a date string like YYYY-MM-DD, convert to ISO
+        const [year, month, day] = expense.date.split('-').map(Number);
+        const date = new Date(year, month - 1, day, 12, 0, 0, 0);
+        formattedDate = date.toISOString();
+      }
+      
+      console.log('Formatted date:', formattedDate);
+      
       const { data, error } = await supabase
         .from('expenses')
         .insert([{
-          date: expense.date + 'T00:00:00.000Z', // Convert to full timestamp
+          date: formattedDate,
           amount: expense.amount,
           person: expense.person,
           type: expense.type
