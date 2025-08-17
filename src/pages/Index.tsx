@@ -31,11 +31,20 @@ const todayStr = () => {
 };
 
 const toIsoFromLocalDate = (ymd: string) => {
-  // Convert YYYY-MM-DD to local date string
-  // This ensures the date is treated as local time, not UTC
+  // Convert YYYY-MM-DD to ISO string ensuring local timezone
   const [year, month, day] = ymd.split('-').map(Number);
-  const localDate = new Date(year, month - 1, day, 12, 0, 0, 0);
-  console.log('Date conversion:', { input: ymd, output: localDate.toISOString() });
+  
+  // Create date in local timezone by using a string format that's interpreted as local
+  const localDateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T12:00:00`;
+  const localDate = new Date(localDateStr);
+  
+  console.log('Date conversion:', { 
+    input: ymd, 
+    localDateStr,
+    output: localDate.toISOString(),
+    localDate: localDate.toString()
+  });
+  
   return localDate.toISOString();
 };
 

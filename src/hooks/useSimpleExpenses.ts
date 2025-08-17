@@ -59,12 +59,10 @@ export const useSimpleExpenses = () => {
     try {
       console.log('Adding expense with date:', expense.date);
       
-      // Convert YYYY-MM-DD to ISO string with local timezone
-      const [year, month, day] = expense.date.split('-').map(Number);
-      const localDate = new Date(year, month - 1, day, 12, 0, 0, 0);
-      const isoDate = localDate.toISOString();
+      // expense.date is already an ISO string from toIsoFromLocalDate
+      const isoDate = expense.date;
       
-      console.log('Formatted date:', isoDate);
+      console.log('Using date as is:', isoDate);
       
       const { data, error } = await supabase
         .from('expenses')
