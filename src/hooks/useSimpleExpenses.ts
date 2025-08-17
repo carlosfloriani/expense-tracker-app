@@ -28,13 +28,19 @@ export const useSimpleExpenses = () => {
 
       if (error) throw error;
 
-      const formattedExpenses: Expense[] = data.map(expense => ({
-        id: expense.id,
-        date: expense.date.split('T')[0], // Convert to YYYY-MM-DD format
-        amount: parseFloat(expense.amount.toString()),
-        person: expense.person as Person,
-        type: expense.type as ExpenseType
-      }));
+      const formattedExpenses: Expense[] = data.map(expense => {
+        // Parse the ISO date and convert to local date string
+        const date = new Date(expense.date);
+        const localDate = date.toLocaleDateString('en-CA'); // Returns YYYY-MM-DD format
+        
+        return {
+          id: expense.id,
+          date: localDate,
+          amount: parseFloat(expense.amount.toString()),
+          person: expense.person as Person,
+          type: expense.type as ExpenseType
+        };
+      });
 
       setExpenses(formattedExpenses);
     } catch (error) {
@@ -82,7 +88,7 @@ export const useSimpleExpenses = () => {
 
       const newExpense: Expense = {
         id: data.id,
-        date: data.date.split('T')[0],
+        date: new Date(data.date).toLocaleDateString('en-CA'),
         amount: parseFloat(data.amount.toString()),
         person: data.person as Person,
         type: data.type as ExpenseType
