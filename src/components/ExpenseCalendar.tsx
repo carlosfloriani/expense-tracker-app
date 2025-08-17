@@ -6,12 +6,7 @@ type Expense = {
   type: "Ifood" | "Restaurante";
 };
 
-function ymd(d: Date) {
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-}
+
 
 export default function ExpenseCalendar({
   expenses,
@@ -46,6 +41,13 @@ export default function ExpenseCalendar({
     const expenseYearMonth = expense.date.substring(0, 7); // Get YYYY-MM part
     if (expenseYearMonth === currentMonth) {
       const day = parseInt(expense.date.substring(8, 10)); // Get DD part
+      console.log('Calendar processing expense:', {
+        expenseDate: expense.date,
+        expenseYearMonth,
+        currentMonth,
+        extractedDay: day,
+        expense: expense
+      });
       if (!expensesByDay.has(day)) expensesByDay.set(day, []);
       expensesByDay.get(day)!.push(expense);
     }
