@@ -30,8 +30,20 @@ export const useSimpleExpenses = () => {
 
       const formattedExpenses: Expense[] = data.map(expense => {
         // Parse the ISO date and convert to local date string
+        // Use UTC methods to avoid timezone conversion issues
         const date = new Date(expense.date);
-        const localDate = date.toLocaleDateString('en-CA'); // Returns YYYY-MM-DD format
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const localDate = `${year}-${month}-${day}`;
+        
+        console.log('Fetching expense date:', { 
+          original: expense.date, 
+          parsed: localDate,
+          utcYear: year,
+          utcMonth: month,
+          utcDay: day
+        });
         
         return {
           id: expense.id,
@@ -79,7 +91,7 @@ export const useSimpleExpenses = () => {
 
       const newExpense: Expense = {
         id: data.id,
-        date: new Date(data.date).toLocaleDateString('en-CA'),
+        date: new Date(data.date).toISOString().split('T')[0], // Get YYYY-MM-DD from ISO
         amount: parseFloat(data.amount.toString()),
         person: data.person as Person,
         type: data.type as ExpenseType
@@ -151,9 +163,15 @@ export const useSimpleExpenses = () => {
           
           if (payload.eventType === 'INSERT') {
             const newExpense = payload.new as any;
+            const date = new Date(newExpense.date);
+            const year = date.getUTCFullYear();
+            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(date.getUTCDate()).padStart(2, '0');
+            const localDate = `${year}-${month}-${day}`;
+            
             const formattedExpense: Expense = {
               id: newExpense.id,
-              date: new Date(newExpense.date).toLocaleDateString('en-CA'),
+              date: localDate,
               amount: parseFloat(newExpense.amount.toString()),
               person: newExpense.person as Person,
               type: newExpense.type as ExpenseType
@@ -168,9 +186,15 @@ export const useSimpleExpenses = () => {
             setExpenses(prev => prev.filter(expense => expense.id !== payload.old.id));
           } else if (payload.eventType === 'UPDATE') {
             const updatedExpense = payload.new as any;
+            const date = new Date(updatedExpense.date);
+            const year = date.getUTCFullYear();
+            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(date.getUTCDate()).padStart(2, '0');
+            const localDate = `${year}-${month}-${day}`;
+            
             const formattedExpense: Expense = {
               id: updatedExpense.id,
-              date: new Date(updatedExpense.date).toLocaleDateString('en-CA'),
+              date: localDate,
               amount: parseFloat(updatedExpense.amount.toString()),
               person: updatedExpense.person as Person,
               type: updatedExpense.type as ExpenseType
