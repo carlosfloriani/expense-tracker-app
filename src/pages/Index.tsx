@@ -10,8 +10,8 @@ import MonthNavigation from "@/components/MonthNavigation";
 import { useSimpleExpenses, type Person, type ExpenseType } from "@/hooks/useSimpleExpenses";
 
 const LIMITS: Record<ExpenseType, number> = {
-  Ifood: 10,
-  Restaurante: 4,
+  Ifood: 10, // R$ 10,00
+  Restaurante: 4, // R$ 4,00
 };
 
 const monthKey = () => {
@@ -129,15 +129,14 @@ const Index = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // valida limites (por unidade)
+    // Verificar se o limite foi atingido (apenas notificar, não bloquear)
     const nextCount = counts.byType[type] + 1;
     if (nextCount > LIMITS[type]) {
       toast({
         title: "Limite atingido",
-        description: `Você já alcançou o limite de ${LIMITS[type]} para ${type} neste mês.`,
+        description: `Você já alcançou o limite de ${LIMITS[type]} para ${type} neste mês, mas pode continuar adicionando.`,
         variant: "destructive",
       });
-      return;
     }
 
     // Reset form after successful submission

@@ -42,7 +42,11 @@ export const useSimpleExpenses = () => {
           parsed: localDate,
           utcYear: year,
           utcMonth: month,
-          utcDay: day
+          utcDay: day,
+          expenseId: expense.id,
+          expensePerson: expense.person,
+          expenseType: expense.type,
+          expenseAmount: expense.amount
         });
         
         return {
