@@ -31,10 +31,12 @@ const todayStr = () => {
 };
 
 const toIsoFromLocalDate = (ymd: string) => {
-  // Simple approach: just return the date as YYYY-MM-DD
-  // The addExpense function will handle the conversion
-  console.log('Date input:', ymd);
-  return ymd;
+  // Convert YYYY-MM-DD to local date string
+  // This ensures the date is treated as local time, not UTC
+  const [year, month, day] = ymd.split('-').map(Number);
+  const localDate = new Date(year, month - 1, day, 12, 0, 0, 0);
+  console.log('Date conversion:', { input: ymd, output: localDate.toISOString() });
+  return localDate.toISOString();
 };
 
 const Index = () => {
@@ -81,9 +83,9 @@ const Index = () => {
   // Filtrar gastos do mês atual
   const currentMonthExpenses = useMemo(() => {
     return expenses.filter(expense => {
-      const expenseDate = new Date(expense.date);
-      const [year, month] = currentMonth.split("-").map(Number);
-      return expenseDate.getFullYear() === year && expenseDate.getMonth() === month - 1;
+      // expense.date is already in YYYY-MM-DD format
+      const expenseYearMonth = expense.date.substring(0, 7); // Get YYYY-MM part
+      return expenseYearMonth === currentMonth;
     });
   }, [expenses, currentMonth]);
 

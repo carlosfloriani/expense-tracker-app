@@ -59,24 +59,17 @@ export const useSimpleExpenses = () => {
     try {
       console.log('Adding expense with date:', expense.date);
       
-      // Ensure the date is in the correct format
-      let formattedDate = expense.date;
-      if (typeof expense.date === 'string' && expense.date.includes('T')) {
-        // If it's already an ISO string, use it as is
-        formattedDate = expense.date;
-      } else {
-        // If it's a date string like YYYY-MM-DD, convert to ISO
-        const [year, month, day] = expense.date.split('-').map(Number);
-        const date = new Date(year, month - 1, day, 12, 0, 0, 0);
-        formattedDate = date.toISOString();
-      }
+      // Convert YYYY-MM-DD to ISO string with local timezone
+      const [year, month, day] = expense.date.split('-').map(Number);
+      const localDate = new Date(year, month - 1, day, 12, 0, 0, 0);
+      const isoDate = localDate.toISOString();
       
-      console.log('Formatted date:', formattedDate);
+      console.log('Formatted date:', isoDate);
       
       const { data, error } = await supabase
         .from('expenses')
         .insert([{
-          date: formattedDate,
+          date: isoDate,
           amount: expense.amount,
           person: expense.person,
           type: expense.type
@@ -141,8 +134,56 @@ export const useSimpleExpenses = () => {
     }
   };
 
+  // Setup realtime subscription
   useEffect(() => {
     fetchExpenses();
+
+    // Subscribe to realtime changes
+    const channel = supabase
+      .channel('expenses_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'expenses'
+        },
+        (payload) => {
+          console.log('Realtime change:', payload);
+          
+          if (payload.eventType === 'INSERT') {
+            const newExpense = payload.new as any;
+            const formattedExpense: Expense = {
+              id: newExpense.id,
+              date: new Date(newExpense.date).toLocaleDateString('en-CA'),
+              amount: parseFloat(newExpense.amount.toString()),
+              person: newExpense.person as Person,
+              type: newExpense.type as ExpenseType
+            };
+            setExpenses(prev => [formattedExpense, ...prev]);
+          } else if (payload.eventType === 'DELETE') {
+            setExpenses(prev => prev.filter(expense => expense.id !== payload.old.id));
+          } else if (payload.eventType === 'UPDATE') {
+            const updatedExpense = payload.new as any;
+            const formattedExpense: Expense = {
+              id: updatedExpense.id,
+              date: new Date(updatedExpense.date).toLocaleDateString('en-CA'),
+              amount: parseFloat(updatedExpense.amount.toString()),
+              person: updatedExpense.person as Person,
+              type: updatedExpense.type as ExpenseType
+            };
+            setExpenses(prev => prev.map(expense => 
+              expense.id === formattedExpense.id ? formattedExpense : expense
+            ));
+          }
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return {
