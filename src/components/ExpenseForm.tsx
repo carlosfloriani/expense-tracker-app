@@ -6,7 +6,7 @@ type Props = {
   amount: number;
   setAmount: (v: number) => void;
   person: "Carlos" | "Gabrielly";
-  setPerson: (p: "Carlos" | "Gabrielly") => void;
+setPerson: (p: "Carlos" | "Gabrielly") => void;
   type: "Ifood" | "Restaurante";
   setType: (t: "Ifood" | "Restaurante") => void;
   dateStr: string;
