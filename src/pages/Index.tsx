@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CounterBar from "@/components/CounterBar";
 import { useToast } from "@/hooks/use-toast";
-import { useSimpleAuth } from "@/contexts/SimpleAuthContext";
 import { Button } from "@/components/ui/button";
 import ExpenseForm from "@/components/ExpenseForm";
 import ExpenseCalendar from "@/components/ExpenseCalendar";
@@ -52,19 +51,11 @@ const Index = () => {
   const [currentMonth, setCurrentMonth] = useState<string>(monthKey());
   const { expenses, loading, addExpense, deleteExpense } = useSimpleExpenses();
   const { toast } = useToast();
-  const { isAuthenticated, loading: authLoading, logout } = useSimpleAuth();
   const navigate = useNavigate();
-
-  // Redirect to auth if not logged in
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      navigate('/auth');
-    }
-  }, [isAuthenticated, authLoading, navigate]);
 
   // Estados do formulário
   const [amount, setAmount] = useState<number>(1);
-  const [person, setPerson] = useState<Person>("Ana");
+  const [person, setPerson] = useState<Person>("Brenda");
   const [type, setType] = useState<ExpenseType>("Ifood");
   const [dateStr, setDateStr] = useState<string>(todayStr());
 
@@ -75,7 +66,7 @@ const Index = () => {
       try {
         const d = JSON.parse(defaultsRaw);
         if (d.amount && typeof d.amount === 'number') setAmount(d.amount);
-        if (d.person && (d.person === "Ana" || d.person === "Lucas")) setPerson(d.person);
+        if (d.person && (d.person === "Brenda" || d.person === "Lucas")) setPerson(d.person);
         if (d.type && (d.type === "Ifood" || d.type === "Restaurante")) setType(d.type);
       } catch (error) {
         console.error('Error parsing localStorage defaults:', error);
@@ -171,14 +162,7 @@ const Index = () => {
             <h1 className="text-xl font-semibold tracking-tight text-foreground flex-1 text-center">
               Soft Spend Diary
             </h1>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={logout}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              Sair
-            </Button>
+
           </div>
           
           {/* Contadores em linha */}
@@ -186,13 +170,13 @@ const Index = () => {
             <div className="space-y-2">
               <CounterBar label="Ifood" count={counts.totalsByType.Ifood} limit={LIMITS.Ifood} />
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-personAna/10 rounded-lg p-2 text-center">
-<div className="text-muted-foreground">Ana</div>
-<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                <div className="bg-personBrenda/10 rounded-lg p-2 text-center">
+<div className="text-muted-foreground">Brenda</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Brenda").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Ana</div>
-<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="text-muted-foreground">Lucas</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Lucas").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -203,13 +187,13 @@ const Index = () => {
                 limit={LIMITS.Restaurante}
               />
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-personAna/10 rounded-lg p-2 text-center">
-<div className="text-muted-foreground">Ana</div>
-<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                <div className="bg-personBrenda/10 rounded-lg p-2 text-center">
+<div className="text-muted-foreground">Brenda</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Brenda").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Ana</div>
-<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="text-muted-foreground">Lucas</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Lucas").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -284,7 +268,7 @@ const Index = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
-                        e.person === "Ana" ? "bg-personAna" : "bg-personGaby"
+                        e.person === "Brenda" ? "bg-personBrenda" : "bg-personGaby"
                       }`} />
                       <div className="text-sm">
                         <div className="font-medium text-foreground">{e.person}</div>

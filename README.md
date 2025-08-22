@@ -10,7 +10,7 @@ O Soft Spend Diary é uma aplicação web para controle de gastos pessoais, perm
 
 - 📊 Dashboard com visão geral dos gastos mensais
 - 📅 Calendário interativo para visualizar gastos por data
-- 👥 Suporte a múltiplas pessoas (Ana e Lucas)
+- 👥 Suporte a múltiplas pessoas (Brenda e Lucas)
 - 🍕 Categorização de gastos (Ifood e Restaurante)
 - 📱 Interface responsiva e moderna
 - 🔐 Sistema de autenticação simples
@@ -84,9 +84,30 @@ docker run -p 8080:8080 -v $(pwd):/app expense-tracker-app
 docker run -p 80:80 expense-tracker-app
 ```
 
-## Autenticação
+## Deploy
 
-Para acessar o sistema, use a senha: `123456`
+### Vercel (Recomendado)
+1. Conecte seu repositório ao Vercel
+2. Configure as variáveis de ambiente (se necessário)
+3. Deploy automático a cada push
+
+### Netlify
+1. Conecte seu repositório ao Netlify
+2. Build command: `npm run build`
+3. Publish directory: `dist`
+
+### GitHub Pages
+1. Configure GitHub Actions
+2. Deploy automático a cada push na branch main
+
+### Docker
+```bash
+# Build da imagem de produção
+docker build -t expense-tracker-app .
+
+# Executar container
+docker run -p 80:80 expense-tracker-app
+```
 
 ## Estrutura do Projeto
 

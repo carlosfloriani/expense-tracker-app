@@ -73,9 +73,9 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				    personAna: {
-      DEFAULT: 'hsl(var(--person-ana))',
-      foreground: 'hsl(var(--person-ana-foreground))'
+				    personBrenda: {
+      DEFAULT: 'hsl(var(--person-brenda))',
+      foreground: 'hsl(var(--person-brenda-foreground))'
     },
 				personGaby: {
 					DEFAULT: 'hsl(var(--person-gabreilly))',

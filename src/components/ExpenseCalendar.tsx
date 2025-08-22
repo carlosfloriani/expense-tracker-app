@@ -2,7 +2,7 @@ type Expense = {
   id: string;
   date: string; // ISO
   amount: number;
-  person: "Ana" | "Lucas";
+  person: "Brenda" | "Lucas";
   type: "Ifood" | "Restaurante";
 };
 
@@ -115,8 +115,8 @@ export default function ExpenseCalendar({
                                 key={expense.id}
                                 className={`relative px-1 py-0.5 rounded text-xs font-medium text-center flex items-center justify-between group ${
                                   expense.type === "Ifood"
-                                    ? `bg-gradient-to-r ${expense.person === "Ana" ? "from-personAna to-ifood" : "from-personGaby to-ifood"} text-white`
-: `bg-gradient-to-r ${expense.person === "Ana" ? "from-personAna to-restaurante" : "from-personGaby to-restaurante"} text-white`
+                                    ? `bg-gradient-to-r ${expense.person === "Brenda" ? "from-personBrenda to-ifood" : "from-personGaby to-ifood"} text-white`
+: `bg-gradient-to-r ${expense.person === "Brenda" ? "from-personBrenda to-restaurante" : "from-personGaby to-restaurante"} text-white`
                                 }`}
                                 title={`${expense.person} - ${expense.type} - ${expense.amount}`}
                               >
@@ -147,8 +147,8 @@ export default function ExpenseCalendar({
       
       <div className="mt-4 flex items-center justify-center gap-4 text-xs">
         <div className="flex items-center gap-2">
-          <span className="h-2 w-4 rounded bg-personAna" />
-<span className="text-muted-foreground">Ana</span>
+          <span className="h-2 w-4 rounded bg-personBrenda" />
+<span className="text-muted-foreground">Brenda</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-4 rounded bg-personGaby" />

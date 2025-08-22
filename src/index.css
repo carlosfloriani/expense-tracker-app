@@ -51,8 +51,8 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Personas (light) */
-      --person-ana: 210 80% 55%;
-  --person-ana-foreground: 240 10% 10%;
+      --person-brenda: 210 80% 55%;
+  --person-brenda-foreground: 240 10% 10%;
     --person-gabreilly: 330 85% 65%;
     --person-gabreilly-foreground: 240 10% 10%;
     
@@ -108,8 +108,8 @@ All colors MUST be HSL.
     --sidebar-ring: 265 70% 75%;
 
     /* Personas (dark) - tons pastel */
-      --person-ana: 210 80% 70%;
-  --person-ana-foreground: 235 15% 12%;
+      --person-brenda: 210 80% 70%;
+  --person-brenda-foreground: 235 15% 12%;
     --person-gabreilly: 330 80% 75%;
     --person-gabreilly-foreground: 235 15% 12%;
     

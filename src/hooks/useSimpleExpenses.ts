@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
-export type Person = "Ana" | "Lucas";
+export type Person = "Brenda" | "Lucas";
 export type ExpenseType = "Ifood" | "Restaurante";
 
 export type Expense = {
@@ -18,7 +18,7 @@ const mockExpenses: Expense[] = [
     id: "1",
     date: "2024-12-15",
     amount: 45.50,
-    person: "Ana",
+    person: "Brenda",
     type: "Ifood"
   },
   {
@@ -32,7 +32,7 @@ const mockExpenses: Expense[] = [
     id: "3",
     date: "2024-12-13",
     amount: 32.00,
-    person: "Ana",
+    person: "Brenda",
     type: "Ifood"
   },
   {
@@ -46,7 +46,7 @@ const mockExpenses: Expense[] = [
     id: "5",
     date: "2024-12-11",
     amount: 28.50,
-    person: "Ana",
+    person: "Brenda",
     type: "Ifood"
   }
 ];
