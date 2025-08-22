@@ -29,7 +29,7 @@ const SimpleAuth = () => {
     if (success) {
       toast({
         title: "Login realizado com sucesso!",
-        description: "Bem-vinda, Gabrielly!"
+        description: "Bem-vinda, Ana!"
       });
       navigate('/');
     } else {

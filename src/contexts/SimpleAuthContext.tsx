@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
 interface SimpleAuthContextType {
   isAuthenticated: boolean;
@@ -33,17 +32,8 @@ export const SimpleAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const login = async (password: string): Promise<boolean> => {
     try {
-      // Use secure edge function to verify password
-      const { data, error } = await supabase.functions.invoke('verify-password', {
-        body: { password }
-      });
-
-      if (error) {
-        console.error('Error verifying password:', error);
-        return false;
-      }
-
-      if (data?.success) {
+      // Senha simples para demonstração
+      if (password === '123456') {
         setIsAuthenticated(true);
         localStorage.setItem('simple_auth', 'true');
         return true;

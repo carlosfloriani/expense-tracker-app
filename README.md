@@ -1,73 +1,59 @@
-# Welcome to your Lovable project
+# Soft Spend Diary
 
-## Project info
+Um aplicativo de controle de gastos pessoais desenvolvido com React, TypeScript e Tailwind CSS.
 
-**URL**: https://lovable.dev/projects/68684644-cd8f-406f-b134-226f76691c7f
+## Sobre o Projeto
 
-## How can I edit this code?
+O Soft Spend Diary é uma aplicação web para controle de gastos pessoais, permitindo registrar e acompanhar despesas de diferentes categorias (Ifood e Restaurante) para múltiplas pessoas.
 
-There are several ways of editing your application.
+## Funcionalidades
 
-**Use Lovable**
+- 📊 Dashboard com visão geral dos gastos mensais
+- 📅 Calendário interativo para visualizar gastos por data
+- 👥 Suporte a múltiplas pessoas (Ana e Lucas)
+- 🍕 Categorização de gastos (Ifood e Restaurante)
+- 📱 Interface responsiva e moderna
+- 🔐 Sistema de autenticação simples
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/68684644-cd8f-406f-b134-226f76691c7f) and start prompting.
+## Tecnologias Utilizadas
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend**: React 18 + TypeScript
+- **UI Components**: shadcn/ui + Radix UI
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **Routing**: React Router DOM
+- **Forms**: React Hook Form + Zod
+- **Icons**: Lucide React
 
-**Use your preferred IDE**
+## Como Executar
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Instalar dependências
+npm install
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Executar em modo de desenvolvimento
 npm run dev
+
+# Build para produção
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+## Autenticação
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Para acessar o sistema, use a senha: `123456`
 
-**Use GitHub Codespaces**
+## Estrutura do Projeto
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+src/
+├── components/          # Componentes reutilizáveis
+├── contexts/           # Contextos React
+├── hooks/              # Custom hooks
+├── pages/              # Páginas da aplicação
+├── lib/                # Utilitários
+└── ui/                 # Componentes de UI (shadcn/ui)
+```
 
-## What technologies are used for this project?
+## Desenvolvimento
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/68684644-cd8f-406f-b134-226f76691c7f) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Este projeto foi desenvolvido como uma demonstração de habilidades em React e TypeScript, com foco em uma interface moderna e intuitiva para controle financeiro pessoal.

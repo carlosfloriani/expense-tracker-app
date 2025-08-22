@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-export type Person = "Carlos" | "Gabrielly";
+export type Person = "Ana" | "Lucas";
 export type ExpenseType = "Ifood" | "Restaurante";
 
 export type Expense = {
@@ -13,6 +12,45 @@ export type Expense = {
   type: ExpenseType;
 };
 
+// Dados mock iniciais
+const mockExpenses: Expense[] = [
+  {
+    id: "1",
+    date: "2024-12-15",
+    amount: 45.50,
+    person: "Ana",
+    type: "Ifood"
+  },
+  {
+    id: "2",
+    date: "2024-12-14",
+    amount: 78.90,
+    person: "Lucas",
+    type: "Restaurante"
+  },
+  {
+    id: "3",
+    date: "2024-12-13",
+    amount: 32.00,
+    person: "Ana",
+    type: "Ifood"
+  },
+  {
+    id: "4",
+    date: "2024-12-12",
+    amount: 120.00,
+    person: "Lucas",
+    type: "Restaurante"
+  },
+  {
+    id: "5",
+    date: "2024-12-11",
+    amount: 28.50,
+    person: "Ana",
+    type: "Ifood"
+  }
+];
+
 export const useSimpleExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,49 +59,19 @@ export const useSimpleExpenses = () => {
   const fetchExpenses = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('expenses')
-        .select('*')
-        .order('date', { ascending: false });
-
-      if (error) throw error;
-
-      const formattedExpenses: Expense[] = data.map(expense => {
-        // Parse the ISO date and convert to local date string
-        // Use UTC methods to avoid timezone conversion issues
-        const date = new Date(expense.date);
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        const localDate = `${year}-${month}-${day}`;
-        
-        console.log('Fetching expense date:', { 
-          original: expense.date, 
-          parsed: localDate,
-          utcYear: year,
-          utcMonth: month,
-          utcDay: day,
-          expenseId: expense.id,
-          expensePerson: expense.person,
-          expenseType: expense.type,
-          expenseAmount: expense.amount
-        });
-        
-        return {
-          id: expense.id,
-          date: localDate,
-          amount: parseFloat(expense.amount.toString()),
-          person: expense.person as Person,
-          type: expense.type as ExpenseType
-        };
-      });
-
-      setExpenses(formattedExpenses);
+      // Simular delay de carregamento
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Carregar dados do localStorage ou usar mock inicial
+      const savedExpenses = localStorage.getItem('mock_expenses');
+      const initialExpenses = savedExpenses ? JSON.parse(savedExpenses) : mockExpenses;
+      
+      setExpenses(initialExpenses);
     } catch (error) {
       console.error('Error fetching expenses:', error);
       toast({
         title: "Erro ao carregar gastos",
-        description: "Não foi possível carregar os gastos do banco de dados.",
+        description: "Não foi possível carregar os gastos.",
         variant: "destructive",
       });
     } finally {
@@ -73,35 +81,19 @@ export const useSimpleExpenses = () => {
 
   const addExpense = async (expense: Omit<Expense, 'id'>) => {
     try {
-      console.log('Adding expense with date:', expense.date);
-      
-      // expense.date is already an ISO string from toIsoFromLocalDate
-      const isoDate = expense.date;
-      
-      console.log('Using date as is:', isoDate);
-      
-      const { data, error } = await supabase
-        .from('expenses')
-        .insert([{
-          date: isoDate,
-          amount: expense.amount,
-          person: expense.person,
-          type: expense.type
-        }])
-        .select()
-        .single();
-
-      if (error) throw error;
-
       const newExpense: Expense = {
-        id: data.id,
-        date: new Date(data.date).toISOString().split('T')[0], // Get YYYY-MM-DD from ISO
-        amount: parseFloat(data.amount.toString()),
-        person: data.person as Person,
-        type: data.type as ExpenseType
+        id: Date.now().toString(), // Gerar ID único
+        date: expense.date,
+        amount: expense.amount,
+        person: expense.person,
+        type: expense.type
       };
 
-      setExpenses(prev => [newExpense, ...prev]);
+      const updatedExpenses = [newExpense, ...expenses];
+      setExpenses(updatedExpenses);
+      
+      // Salvar no localStorage
+      localStorage.setItem('mock_expenses', JSON.stringify(updatedExpenses));
       
       toast({
         title: "Gasto adicionado",
@@ -113,7 +105,7 @@ export const useSimpleExpenses = () => {
       console.error('Error adding expense:', error);
       toast({
         title: "Erro ao adicionar gasto",
-        description: "Não foi possível salvar o gasto no banco de dados.",
+        description: "Não foi possível salvar o gasto.",
         variant: "destructive",
       });
       return { success: false };
@@ -122,14 +114,11 @@ export const useSimpleExpenses = () => {
 
   const deleteExpense = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('expenses')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
-      setExpenses(prev => prev.filter(expense => expense.id !== id));
+      const updatedExpenses = expenses.filter(expense => expense.id !== id);
+      setExpenses(updatedExpenses);
+      
+      // Salvar no localStorage
+      localStorage.setItem('mock_expenses', JSON.stringify(updatedExpenses));
       
       toast({
         title: "Gasto removido",
@@ -141,80 +130,15 @@ export const useSimpleExpenses = () => {
       console.error('Error deleting expense:', error);
       toast({
         title: "Erro ao excluir gasto",
-        description: "Não foi possível excluir o gasto do banco de dados.",
+        description: "Não foi possível excluir o gasto.",
         variant: "destructive",
       });
       return { success: false };
     }
   };
 
-  // Setup realtime subscription
   useEffect(() => {
     fetchExpenses();
-
-    // Subscribe to realtime changes
-    const channel = supabase
-      .channel('expenses_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'expenses'
-        },
-        (payload) => {
-          console.log('Realtime change:', payload);
-          
-          if (payload.eventType === 'INSERT') {
-            const newExpense = payload.new as any;
-            const date = new Date(newExpense.date);
-            const year = date.getUTCFullYear();
-            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(date.getUTCDate()).padStart(2, '0');
-            const localDate = `${year}-${month}-${day}`;
-            
-            const formattedExpense: Expense = {
-              id: newExpense.id,
-              date: localDate,
-              amount: parseFloat(newExpense.amount.toString()),
-              person: newExpense.person as Person,
-              type: newExpense.type as ExpenseType
-            };
-            // Avoid duplicate entries by checking if expense already exists
-            setExpenses(prev => {
-              const exists = prev.some(exp => exp.id === formattedExpense.id);
-              if (exists) return prev;
-              return [formattedExpense, ...prev];
-            });
-          } else if (payload.eventType === 'DELETE') {
-            setExpenses(prev => prev.filter(expense => expense.id !== payload.old.id));
-          } else if (payload.eventType === 'UPDATE') {
-            const updatedExpense = payload.new as any;
-            const date = new Date(updatedExpense.date);
-            const year = date.getUTCFullYear();
-            const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(date.getUTCDate()).padStart(2, '0');
-            const localDate = `${year}-${month}-${day}`;
-            
-            const formattedExpense: Expense = {
-              id: updatedExpense.id,
-              date: localDate,
-              amount: parseFloat(updatedExpense.amount.toString()),
-              person: updatedExpense.person as Person,
-              type: updatedExpense.type as ExpenseType
-            };
-            setExpenses(prev => prev.map(expense => 
-              expense.id === formattedExpense.id ? formattedExpense : expense
-            ));
-          }
-        }
-      )
-      .subscribe();
-
-    // Cleanup subscription on unmount
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, []);
 
   return {

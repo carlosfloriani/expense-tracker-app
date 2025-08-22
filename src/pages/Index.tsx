@@ -64,7 +64,7 @@ const Index = () => {
 
   // Estados do formulário
   const [amount, setAmount] = useState<number>(1);
-  const [person, setPerson] = useState<Person>("Gabrielly");
+  const [person, setPerson] = useState<Person>("Ana");
   const [type, setType] = useState<ExpenseType>("Ifood");
   const [dateStr, setDateStr] = useState<string>(todayStr());
 
@@ -75,7 +75,7 @@ const Index = () => {
       try {
         const d = JSON.parse(defaultsRaw);
         if (d.amount && typeof d.amount === 'number') setAmount(d.amount);
-        if (d.person && (d.person === "Carlos" || d.person === "Gabrielly")) setPerson(d.person);
+        if (d.person && (d.person === "Ana" || d.person === "Lucas")) setPerson(d.person);
         if (d.type && (d.type === "Ifood" || d.type === "Restaurante")) setType(d.type);
       } catch (error) {
         console.error('Error parsing localStorage defaults:', error);
@@ -186,9 +186,9 @@ const Index = () => {
             <div className="space-y-2">
               <CounterBar label="Ifood" count={counts.totalsByType.Ifood} limit={LIMITS.Ifood} />
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Carlos</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                <div className="bg-personAna/10 rounded-lg p-2 text-center">
+<div className="text-muted-foreground">Ana</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Gabrielly</div>
@@ -203,9 +203,9 @@ const Index = () => {
                 limit={LIMITS.Restaurante}
               />
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-personCarlos/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Carlos</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Carlos").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                <div className="bg-personAna/10 rounded-lg p-2 text-center">
+<div className="text-muted-foreground">Ana</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
                   <div className="text-muted-foreground">Gabrielly</div>
@@ -284,7 +284,7 @@ const Index = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
-                        e.person === "Carlos" ? "bg-personCarlos" : "bg-personGaby"
+                        e.person === "Ana" ? "bg-personAna" : "bg-personGaby"
                       }`} />
                       <div className="text-sm">
                         <div className="font-medium text-foreground">{e.person}</div>
