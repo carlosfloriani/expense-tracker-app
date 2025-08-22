@@ -191,8 +191,8 @@ const Index = () => {
 <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Gabrielly</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="text-muted-foreground">Ana</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Ifood" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
@@ -208,8 +208,8 @@ const Index = () => {
 <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
                 <div className="bg-personGaby/10 rounded-lg p-2 text-center">
-                  <div className="text-muted-foreground">Gabrielly</div>
-                  <div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Gabrielly").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
+                  <div className="text-muted-foreground">Ana</div>
+<div className="font-medium">{currentMonthExpenses.filter(e => e.type === "Restaurante" && e.person === "Ana").reduce((sum, e) => sum + e.amount, 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</div>
                 </div>
               </div>
             </div>
