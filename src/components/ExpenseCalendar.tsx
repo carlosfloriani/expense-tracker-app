@@ -152,7 +152,7 @@ export default function ExpenseCalendar({
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-4 rounded bg-personGaby" />
-          <span className="text-muted-foreground">Ana</span>
+          <span className="text-muted-foreground">Lucas</span>
         </div>
       </div>
     </div>
