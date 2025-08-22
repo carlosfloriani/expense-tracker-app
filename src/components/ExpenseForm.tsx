@@ -48,7 +48,7 @@ export default function ExpenseForm({
                     : "data-[state=on]:bg-personGaby data-[state=on]:text-personGaby-foreground"
                 } data-[state=off]:bg-muted data-[state=off]:text-muted-foreground`}
               >
-                {p.charAt(0)}
+                {p}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
