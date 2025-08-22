@@ -27,6 +27,8 @@ O Soft Spend Diary é uma aplicação web para controle de gastos pessoais, perm
 
 ## Como Executar
 
+### Opção 1: Execução Local
+
 ```bash
 # Instalar dependências
 npm install
@@ -36,6 +38,50 @@ npm run dev
 
 # Build para produção
 npm run build
+```
+
+### Opção 2: Execução com Docker
+
+#### Usando o script facilitador:
+```bash
+# Tornar o script executável (primeira vez)
+chmod +x docker-scripts.sh
+
+# Ambiente de desenvolvimento
+./docker-scripts.sh dev
+
+# Ambiente de produção
+./docker-scripts.sh prod
+
+# Preview de produção
+./docker-scripts.sh preview
+
+# Ver todos os comandos disponíveis
+./docker-scripts.sh help
+```
+
+#### Usando Docker Compose diretamente:
+```bash
+# Desenvolvimento
+docker-compose --profile dev up --build
+
+# Produção
+docker-compose --profile prod up --build -d
+
+# Preview
+docker-compose --profile preview up --build -d
+```
+
+#### Usando Docker diretamente:
+```bash
+# Build da imagem
+docker build -t expense-tracker-app .
+
+# Executar container de desenvolvimento
+docker run -p 8080:8080 -v $(pwd):/app expense-tracker-app
+
+# Executar container de produção
+docker run -p 80:80 expense-tracker-app
 ```
 
 ## Autenticação
